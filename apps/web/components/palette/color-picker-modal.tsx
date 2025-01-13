@@ -1,6 +1,6 @@
 import { ColorOptions, RawColor } from '@/types/app'
 import { cn } from '@ui/lib/utils'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import { HexColorPicker } from 'react-colorful'
 import { createPortal } from 'react-dom'
@@ -22,7 +22,9 @@ function ColorPickerModal({
   const [_color, setColor] = useState(colorString) // internal state
   const submitRef = useRef<HTMLButtonElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
-  const validColor = tinycolor(_color).isValid() ? tinycolor(_color).toHexString() : colorString
+  const validColor = tinycolor(_color).isValid()
+    ? tinycolor(_color).toHexString()
+    : colorString
   const handleInputChange = (e) => {
     const { value } = e.target
     const color = tinycolor(value)
@@ -52,9 +54,12 @@ function ColorPickerModal({
   }
 
   const inputStyle = {
-    accent: 'selection:bg-accent selection:text-accent-foreground focus:ring-accent',
-    primary: 'selection:bg-primary selection:text-primary-foreground focus:ring-primary',
-    secondary: 'selection:bg-secondary selection:text-secondary-foreground focus:ring-secondary',
+    accent:
+      'selection:bg-accent selection:text-accent-foreground focus:ring-accent',
+    primary:
+      'selection:bg-primary selection:text-primary-foreground focus:ring-primary',
+    secondary:
+      'selection:bg-secondary selection:text-secondary-foreground focus:ring-secondary',
   }
 
   useEffect(() => {
@@ -87,7 +92,7 @@ function ColorPickerModal({
         animate={prefix ? { borderRadius: 12 } : {}}
         className={cn(
           'relative flex flex-col gap-4 overflow-hidden border border-border/30 bg-white/75 text-start transition-colors duration-1000 ease-in-out dark:bg-black/75',
-          { 'rounded-xl': !prefix }
+          { 'rounded-xl': !prefix },
         )}
         exit={prefix ? { borderRadius: 120 } : {}}
         initial={prefix ? { borderRadius: 120 } : {}}
@@ -106,7 +111,11 @@ function ColorPickerModal({
           exit={{ opacity: 0 }}
           initial={{ opacity: 0 }}
         >
-          <HexColorPicker className="!w-full min-w-[12rem]" color={validColor} onChange={(c) => setColor(c)} />
+          <HexColorPicker
+            className="!w-full min-w-[12rem]"
+            color={validColor}
+            onChange={(c) => setColor(c)}
+          />
         </motion.div>
         <motion.div className="px-4">
           <form
@@ -119,7 +128,7 @@ function ColorPickerModal({
             <motion.input
               className={cn(
                 'block w-full rounded-lg border border-border/30 bg-transparent px-2.5 py-1.5 text-sm outline-none focus:ring focus:ring-opacity-50',
-                inputStyle[type]
+                inputStyle[type],
               )}
               id="color"
               layoutId={`color-picker-value-${type}${prefix ? '-' + prefix : ''}`}
@@ -141,13 +150,13 @@ function ColorPickerModal({
         </motion.div>
         <div className="flex">
           <button
-            className="hocus:bg-border block w-full rounded-bl-xl border-r border-t border-r-border/30 border-t-border/30 px-4 py-2 text-foreground transition dark:text-gray-100"
+            className="block w-full rounded-bl-xl border-r border-t border-r-border/30 border-t-border/30 px-4 py-2 text-foreground transition hocus:bg-border dark:text-gray-100"
             onClick={onClose}
           >
             Cancel
           </button>
           <button
-            className="hocus:bg-border block w-full rounded-br-xl border-t border-t-border/30 px-4 py-2 text-foreground transition dark:text-gray-100"
+            className="block w-full rounded-br-xl border-t border-t-border/30 px-4 py-2 text-foreground transition hocus:bg-border dark:text-gray-100"
             onClick={handleColorChange}
             ref={submitRef}
           >
@@ -156,7 +165,7 @@ function ColorPickerModal({
         </div>
       </motion.div>
     </motion.div>,
-    document.body
+    document.body,
   )
 }
 

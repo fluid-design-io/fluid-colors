@@ -1,6 +1,6 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import html2canvas from 'html2canvas'
 import { DownloadIcon } from 'lucide-react'
 import { Fragment, useEffect, useState } from 'react'
@@ -15,7 +15,11 @@ type GenerateImageOptions = {
   desktopSize?: boolean
 }
 
-function DownloadBasePalettePlugin({ setOpen }: { setOpen: (open: boolean) => void }) {
+function DownloadBasePalettePlugin({
+  setOpen,
+}: {
+  setOpen: (open: boolean) => void
+}) {
   const [isLoaded, setisLoaded] = useState(false)
   const [imageData, setImageData] = useState<null | string>(null)
   const [desktopSize, setDesktopSize] = useState<boolean | undefined>(undefined)
@@ -28,8 +32,11 @@ function DownloadBasePalettePlugin({ setOpen }: { setOpen: (open: boolean) => vo
       // !FIX LINE HEIGHT
       const style = document.createElement('style')
       document.head.appendChild(style)
-      style.sheet?.insertRule('body > div:last-child img { display: inline-block; }')
-      options.desktopSize && style.sheet?.insertRule('body { min-width: 1920px }')
+      style.sheet?.insertRule(
+        'body > div:last-child img { display: inline-block; }',
+      )
+      options.desktopSize &&
+        style.sheet?.insertRule('body { min-width: 1920px }')
       html2canvas(paletteWrap, {
         allowTaint: true,
         backgroundColor: null,
@@ -81,15 +88,18 @@ function DownloadBasePalettePlugin({ setOpen }: { setOpen: (open: boolean) => vo
         <div
           className={cn(
             'mb-4 w-full overflow-hidden rounded-md',
-            !isDesktopSize && 'aspect-[0.121/1] sm:aspect-[0.339/1] md:aspect-[0.653/1] lg:aspect-[1.82/1]',
-            isDesktopSize && 'aspect-[1.82/1]'
+            !isDesktopSize &&
+              'aspect-[0.121/1] sm:aspect-[0.339/1] md:aspect-[0.653/1] lg:aspect-[1.82/1]',
+            isDesktopSize && 'aspect-[1.82/1]',
           )}
         >
           {isLoaded && imageData ? (
             <motion.img
               alt="Palette preview"
               animate={{ filter: 'blur(0px)', opacity: 1, scale: 1 }}
-              className={cn('object-fit absolute inset-0 h-full w-full rounded border')}
+              className={cn(
+                'object-fit absolute inset-0 h-full w-full rounded border',
+              )}
               exit={{ filter: 'blur(6px)', opacity: 0, scale: 0.97 }}
               height={184}
               initial={{ filter: 'blur(6px)', opacity: 0, scale: 0.97 }}
@@ -117,7 +127,12 @@ function DownloadBasePalettePlugin({ setOpen }: { setOpen: (open: boolean) => vo
         ) : (
           <div />
         )}
-        <Button className="h-8" disabled={!isLoaded} onClick={handleDownload} size="sm">
+        <Button
+          className="h-8"
+          disabled={!isLoaded}
+          onClick={handleDownload}
+          size="sm"
+        >
           <DownloadIcon className="h-4 w-4" />
           <span className="sr-only sm:not-sr-only sm:ms-2">Download image</span>
         </Button>

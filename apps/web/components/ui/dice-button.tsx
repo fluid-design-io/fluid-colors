@@ -5,7 +5,7 @@ import { colorHelper } from '@/lib/colorHelper'
 import { generateBaseColors } from '@/lib/generateBaseColors'
 import { Button } from '@ui/components/ui/button'
 import { cn } from '@ui/lib/utils'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'motion/react'
 import { Dice1, Dice2, Dice3, Dice4, Dice5, Dice6 } from 'lucide-react'
 import { useState } from 'react'
 
@@ -56,18 +56,28 @@ export const DiceButton = () => {
   return (
     <div className="inline-flex">
       <Button
-        className={cn('rounded-e-none transition-colors duration-1000 lg:rounded-e-md', {
-          'pointer-events-none': loading,
-        })}
+        className={cn(
+          'rounded-e-none transition-colors duration-1000 lg:rounded-e-md',
+          {
+            'pointer-events-none': loading,
+          },
+        )}
         onClick={roll}
         size="sm"
         title="Roll to generate a new random palette"
       >
         <div className="sr-only">Roll to generate a new random palette</div>
         <AnimatePresence mode="popLayout">
-          <motion.div className="flex items-center justify-center gap-2" key={`dice-button-${faceKey}`}>
+          <motion.div
+            className="flex items-center justify-center gap-2"
+            key={`dice-button-${faceKey}`}
+          >
             <motion.span
-              animate={{ opacity: 1, scale: 1, transition: { delay: 0.3, duration: 0.7 } }}
+              animate={{
+                opacity: 1,
+                scale: 1,
+                transition: { delay: 0.3, duration: 0.7 },
+              }}
               exit={{
                 opacity: 0,
                 scale: 0.8,

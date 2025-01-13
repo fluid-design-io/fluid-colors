@@ -7,17 +7,25 @@ import { colorHelper } from '@/lib/colorHelper'
 import { useToolStore } from '@/store/toolStore'
 import { ColorOptions } from '@/types/app'
 import { cn } from '@ui/lib/utils'
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { CopyIcon, Palette } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 import ColorPickerModal from './color-picker-modal'
 
-function ColorPicker({ className, type }: { className?: string; type: keyof ColorOptions }) {
+function ColorPicker({
+  className,
+  type,
+}: {
+  className?: string
+  type: keyof ColorOptions
+}) {
   const { colors, setColor } = useColorStore((s) => s)
   const { colorMode } = useToolStore()
   const [isOpen, setIsOpen] = useState(false)
-  const [colorString, setColorString] = useState(colorHelper.toColorMode(colors.baseColors?.[type], colorMode!))
+  const [colorString, setColorString] = useState(
+    colorHelper.toColorMode(colors.baseColors?.[type], colorMode!),
+  )
   const foregroundColor = colorHelper.toForeground(colorString)
   const shouldReduceMotion = useReducedMotion()
   const { copyText } = useCopyText()
@@ -41,7 +49,9 @@ function ColorPicker({ className, type }: { className?: string; type: keyof Colo
     }
   }
   useEffect(() => {
-    setColorString(colorHelper.toColorMode(colors.baseColors?.[type], colorMode!))
+    setColorString(
+      colorHelper.toColorMode(colors.baseColors?.[type], colorMode!),
+    )
   }, [colors.baseColors, colorMode])
   return (
     <AnimatePresence mode="sync">
@@ -52,7 +62,7 @@ function ColorPicker({ className, type }: { className?: string; type: keyof Colo
           // min width - horizontal
           'flex aspect-[2.75/1] max-h-44 w-full items-end justify-stretch rounded-2xl border border-border',
           // small - vertical
-          '@md/section-primary:aspect-[1/1.618] @md/section-primary:max-h-none @md/section-primary:flex-col-reverse @md/section-primary:items-stretch @md/section-primary:justify-start @md/section-primary:gap-6'
+          '@md/section-primary:aspect-[1/1.618] @md/section-primary:max-h-none @md/section-primary:flex-col-reverse @md/section-primary:items-stretch @md/section-primary:justify-start @md/section-primary:gap-6',
         )}
         key={`color-picker-${type}`}
         layoutId={`color-picker-${type}`}
@@ -63,7 +73,7 @@ function ColorPicker({ className, type }: { className?: string; type: keyof Colo
             // min width
             'min-w-[max(9rem,40%)]',
             // small
-            '@md/section-primary:min-w-none @md/section-primary:w-full'
+            '@md/section-primary:min-w-none @md/section-primary:w-full',
           )}
         >
           <motion.h2
@@ -76,7 +86,7 @@ function ColorPicker({ className, type }: { className?: string; type: keyof Colo
             aria-label={`Click to copy ${type} color`}
             className={cn(
               'group/color-button relative w-full text-start font-comfortaa text-xs tabular-nums text-muted-foreground delay-0',
-              'flex items-center justify-between focus:outline-none'
+              'flex items-center justify-between focus:outline-none',
             )}
             layoutId={`color-picker-value-${type}`}
             onClick={() => copyText(colorString)}
@@ -88,10 +98,13 @@ function ColorPicker({ className, type }: { className?: string; type: keyof Colo
                 className={cn(
                   'pointer-events-none relative z-10 w-full bg-background transition-colors',
                   'group-hover/color-button:text-foreground group-focus/color-button:text-foreground',
-                  'contrast-more:font-medium contrast-more:text-foreground/80 contrast-more:group-hover:text-foreground contrast-more:group-focus:text-foreground'
+                  'contrast-more:font-medium contrast-more:text-foreground/80 contrast-more:group-hover:text-foreground contrast-more:group-focus:text-foreground',
                 )}
                 key={`color-picker-value-${colorString}`}
-                {...textAnimation(shouldReduceMotion || false, animationDelay())}
+                {...textAnimation(
+                  shouldReduceMotion || false,
+                  animationDelay(),
+                )}
                 suppressHydrationWarning
               >
                 {colorString}
@@ -103,7 +116,7 @@ function ColorPicker({ className, type }: { className?: string; type: keyof Colo
                 'absolute inset-0 z-[9]',
                 'group-hover/color-button:bg-background group-focus/color-button:bg-background',
                 '-mx-2 -my-2 rounded-[0.9rem] px-2 py-2 transition',
-                'ring-inset group-hover/color-button:ring-1 group-hover/color-button:ring-primary group-focus/color-button:ring-1 group-focus/color-button:ring-primary'
+                'ring-inset group-hover/color-button:ring-1 group-hover/color-button:ring-primary group-focus/color-button:ring-1 group-focus/color-button:ring-primary',
               )}
             />
           </motion.button>
@@ -114,7 +127,7 @@ function ColorPicker({ className, type }: { className?: string; type: keyof Colo
             'group/picker-button flex flex-col items-center justify-center transition-colors duration-500',
             // mobile
             'h-full flex-grow',
-            className
+            className,
           )}
           onClick={() => setIsOpen(true)}
           style={{
@@ -126,7 +139,7 @@ function ColorPicker({ className, type }: { className?: string; type: keyof Colo
           <span>
             <Palette
               className={cn(
-                'mt-4 h-8 w-8 opacity-0 transition-opacity group-hover/picker-button:opacity-100 group-focus-visible/picker-button:opacity-100'
+                'mt-4 h-8 w-8 opacity-0 transition-opacity group-hover/picker-button:opacity-100 group-focus-visible/picker-button:opacity-100',
               )}
               style={{
                 color: foregroundColor,
@@ -135,7 +148,7 @@ function ColorPicker({ className, type }: { className?: string; type: keyof Colo
           </span>
           <span
             className={cn(
-              'mt-1 touch-none select-none text-center text-xs opacity-0 transition-opacity delay-0 group-hover/picker-button:opacity-100 group-hover/picker-button:delay-1000 group-focus-visible/picker-button:opacity-100'
+              'mt-1 touch-none select-none text-center text-xs opacity-0 transition-opacity delay-0 group-hover/picker-button:opacity-100 group-hover/picker-button:delay-1000 group-focus-visible/picker-button:opacity-100',
             )}
             style={{
               color: foregroundColor,

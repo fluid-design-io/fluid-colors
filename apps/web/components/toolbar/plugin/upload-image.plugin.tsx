@@ -13,7 +13,7 @@ import {
   useMotionValue,
   useSpring,
   useTransform,
-} from 'framer-motion'
+} from 'motion/react'
 import { X } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import { Fragment, memo, useEffect, useRef, useState } from 'react'
@@ -48,19 +48,47 @@ function UploadImaagePlugin(props) {
   const PILL_WIDTH = 128
   const isDesktopSize = innerSheetWidth > 640
 
-  const sheetOpacity = useTransform(sheetYSpring, [sheetHeight / 4, sheetHeight], [0.5, 0.7])
+  const sheetOpacity = useTransform(
+    sheetYSpring,
+    [sheetHeight / 4, sheetHeight],
+    [0.5, 0.7],
+  )
   const collapsePreviewOpacity = useTransform(
     sheetYSpring,
     [sheetHeight / 4, sheetHeight],
-    [0, isDesktopSize ? 0.55 : 0.4]
+    [0, isDesktopSize ? 0.55 : 0.4],
   )
-  const sheetBackdropBlur = useTransform(sheetYSpring, [sheetHeight / 4, sheetHeight], [72, 12])
+  const sheetBackdropBlur = useTransform(
+    sheetYSpring,
+    [sheetHeight / 4, sheetHeight],
+    [72, 12],
+  )
 
-  const sheetWidth = useTransform(sheetYSpring, [0, sheetHeight], [innerSheetWidth, PILL_WIDTH])
-  const sheetInnerX = useTransform(sheetYSpring, [0, sheetHeight], [0, -innerSheetWidth / 2 + PILL_WIDTH / 2])
-  const sheetX = useTransform(sheetYSpring, [0, sheetHeight], [0, isRoot ? 0 : 172])
-  const sheetRadius = useTransform(sheetYSpring, [0, sheetHeight], [0, PILL_WIDTH / 5])
-  const sheetInnerOpacity = useTransform(sheetYSpring, [0, sheetHeight / 1.5], [1, 0])
+  const sheetWidth = useTransform(
+    sheetYSpring,
+    [0, sheetHeight],
+    [innerSheetWidth, PILL_WIDTH],
+  )
+  const sheetInnerX = useTransform(
+    sheetYSpring,
+    [0, sheetHeight],
+    [0, -innerSheetWidth / 2 + PILL_WIDTH / 2],
+  )
+  const sheetX = useTransform(
+    sheetYSpring,
+    [0, sheetHeight],
+    [0, isRoot ? 0 : 172],
+  )
+  const sheetRadius = useTransform(
+    sheetYSpring,
+    [0, sheetHeight],
+    [0, PILL_WIDTH / 5],
+  )
+  const sheetInnerOpacity = useTransform(
+    sheetYSpring,
+    [0, sheetHeight / 1.5],
+    [1, 0],
+  )
 
   const sheetBgStyle = useMotionTemplate`hsl(var(--background)/${sheetOpacity})`
   const sheetFilterStyle = useMotionTemplate`blur(${sheetBackdropBlur}px) var(--tw-backdrop-brightness) var(--tw-backdrop-saturate)`
@@ -116,7 +144,8 @@ function UploadImaagePlugin(props) {
   }
 
   function onDragEnd(event, info) {
-    const shouldColappse = info.velocity.y > 20 || (info.velocity.y >= 0 && info.point.y > 45)
+    const shouldColappse =
+      info.velocity.y > 20 || (info.velocity.y >= 0 && info.point.y > 45)
     if (shouldColappse) {
       onCollapse()
     } else {
@@ -126,7 +155,10 @@ function UploadImaagePlugin(props) {
 
   function onDrag(event, info) {
     // If the modal content is scrollable, we need to get more information.
-    if (scrollAreaRef?.current?.scrollHeight > scrollAreaRef?.current?.clientHeight) {
+    if (
+      scrollAreaRef?.current?.scrollHeight >
+      scrollAreaRef?.current?.clientHeight
+    ) {
       // If the modal is already collapsed or if the user has scrolled back to the top,
       // then we can allow the drag event to collapse the modal.
       if (isCollapsed || scrollAreaRef?.current?.scrollTop === 0) {
@@ -226,7 +258,12 @@ function UploadImaagePlugin(props) {
         extractedColors.forEach((color) => {
           // filter out colors that are too
           // muted (< 0.02 saturation), too dark (<0.03 lightness), or too light (>0.97 lightness)
-          if (color.saturation < 0.02 || color.lightness < 0.03 || color.lightness > 0.97) return
+          if (
+            color.saturation < 0.02 ||
+            color.lightness < 0.03 ||
+            color.lightness > 0.97
+          )
+            return
           colors.push(color)
         })
         // if there are less than 3 colors, add white to the array
@@ -267,13 +304,15 @@ function UploadImaagePlugin(props) {
     })
 
     // set the next color as active
-    activeColorIndex === 2 ? setActiveColorIndex(0) : setActiveColorIndex(activeColorIndex + 1)
+    activeColorIndex === 2
+      ? setActiveColorIndex(0)
+      : setActiveColorIndex(activeColorIndex + 1)
   }
   return (
     <motion.div
       animate={controls}
       className={cn(
-        'pointer-events-auto z-40 mx-auto px-0 pb-12 backdrop-brightness-125 backdrop-saturate-150 dark:backdrop-brightness-75 md:pb-0'
+        'pointer-events-auto z-40 mx-auto px-0 pb-12 backdrop-brightness-125 backdrop-saturate-150 dark:backdrop-brightness-75 md:pb-0',
       )}
       drag={enableDrag ? 'y' : false}
       dragConstraints={{ top: 0 }}
@@ -320,7 +359,9 @@ function UploadImaagePlugin(props) {
         className={cn(
           'group absolute inset-x-0 top-0 z-[21] mx-auto h-1 w-12 pt-2 transition-all md:h-1.5',
           !isRoot && isCollapsed && !isDesktopSize && 'left-auto right-8',
-          isCollapsed ? 'w-32 cursor-pointer pb-16' : 'cursor-row-resize pb-1.5'
+          isCollapsed
+            ? 'w-32 cursor-pointer pb-16'
+            : 'cursor-row-resize pb-1.5',
         )}
         onClick={handleSheetPosition}
         title={isCollapsed ? 'Expand' : 'Collapse'}
@@ -331,10 +372,12 @@ function UploadImaagePlugin(props) {
             'absolute inset-0 top-2 mx-auto h-1 w-12 rounded-full transition-colors sm:h-1.5',
             'group-hover:bg-foreground/50 group-focus:bg-foreground/50',
             'backdrop-blur-md backdrop-brightness-75 transition-opacity',
-            isCollapsed ? 'bg-foreground/20' : 'bg-foreground/0'
+            isCollapsed ? 'bg-foreground/20' : 'bg-foreground/0',
           )}
         />
-        <span className="sr-only">Click to {isCollapsed ? 'expand' : 'collapse'} the sheet</span>
+        <span className="sr-only">
+          Click to {isCollapsed ? 'expand' : 'collapse'} the sheet
+        </span>
       </button>
       <motion.div
         className="pointer-events-none absolute inset-x-0 top-0 z-20 mx-auto bg-background/50"
@@ -362,9 +405,16 @@ function UploadImaagePlugin(props) {
       >
         <div className="px-6 lg:px-8">
           <h2 className="mt-4 text-lg font-semibold">Upload Image</h2>
-          <p className="text-sm text-muted-foreground">Upload an image to generate a color palette from it.</p>
+          <p className="text-sm text-muted-foreground">
+            Upload an image to generate a color palette from it.
+          </p>
         </div>
-        <Button className="md:mr-2" onClick={onHidden} size="icon" variant="ghost">
+        <Button
+          className="md:mr-2"
+          onClick={onHidden}
+          size="icon"
+          variant="ghost"
+        >
           <X className="h-4 w-4 text-muted-foreground" strokeWidth={2.5} />
           <span className="sr-only">Close</span>
         </Button>
@@ -374,7 +424,9 @@ function UploadImaagePlugin(props) {
           'mt-4 grid gap-4 sm:gap-6 lg:gap-8',
           'max-h-[calc(100dvh-8rem)] overflow-y-auto overflow-x-visible px-4 pb-6 sm:px-6 lg:px-8',
           'w-[calc(100dvw-env(safe-area-inset-right, 0px)-env(safe-area-inset-left, 0px))]',
-          !!preview ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'
+          !!preview
+            ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
+            : 'grid-cols-1',
         )}
         onScroll={(e) => {
           // enable drag if the user has scrolled back to the top
@@ -391,7 +443,11 @@ function UploadImaagePlugin(props) {
           x: isDesktopSize ? sheetInnerX : 0,
         }}
       >
-        <div className={cn('relative isolate h-[20rem] min-h-64 w-full sm:col-span-2 lg:col-span-1')}>
+        <div
+          className={cn(
+            'relative isolate h-[20rem] min-h-64 w-full sm:col-span-2 lg:col-span-1',
+          )}
+        >
           <AnimatePresence mode="wait">
             {preview && (
               <motion.img
@@ -413,21 +469,27 @@ function UploadImaagePlugin(props) {
                 'absolute bottom-0 inset-x-0 flex justify-center items-center flex flex-row',
                 '[&_.drop-icon]:w-6 [&_.drop-icon]:h-6 [&_.drop-icon]:m-0',
                 'space-y-0 space-x-2',
-              ]
+              ],
             )}
             onDrop={handleDropImage}
           />
         </div>
         {!!preview && (
           <Fragment>
-            <motion.div animate={{ opacity: 1 }} exit={{ opacity: 0 }} initial={{ opacity: 0 }}>
+            <motion.div
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              initial={{ opacity: 0 }}
+            >
               <h3 className="text-lg font-semibold">Base Colors</h3>
               <div className="mt-2 flex flex-wrap">
                 {imageBaseColors.map((color, index) => (
                   <motion.button
                     className={cn(
                       'mb-2 flex h-12 w-full items-center justify-center',
-                      activeColorIndex === index ? 'ring-2 ring-primary ring-offset-2' : 'ring-0'
+                      activeColorIndex === index
+                        ? 'ring-2 ring-primary ring-offset-2'
+                        : 'ring-0',
                     )}
                     key={`${color.hex}-${index}`}
                     layoutId={`color-${color.hex}`}
@@ -437,7 +499,9 @@ function UploadImaagePlugin(props) {
                     <motion.span
                       className={cn(
                         'inline font-mono text-xs',
-                        color.lightness < 0.5 ? 'text-background' : 'text-foreground'
+                        color.lightness < 0.5
+                          ? 'text-background'
+                          : 'text-foreground',
                       )}
                       layoutId={`color-name-${color.hex}`}
                     >
@@ -447,18 +511,24 @@ function UploadImaagePlugin(props) {
                 ))}
               </div>
             </motion.div>
-            <motion.div animate={{ opacity: 1 }} exit={{ opacity: 0 }} initial={{ opacity: 0 }}>
+            <motion.div
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              initial={{ opacity: 0 }}
+            >
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold">Colors</h3>
                 <p className="text-xs text-muted-foreground/70">
-                  Click to replace {['primary', 'secondary', 'accent'][activeColorIndex]} color
+                  Click to replace{' '}
+                  {['primary', 'secondary', 'accent'][activeColorIndex]} color
                 </p>
               </div>
 
               {!!preview && colors.length === 0 && (
                 <div className="mt-2">
                   <p className="text-sm text-foreground/50">
-                    There are no colors to display. Upload a new image to get started.
+                    There are no colors to display. Upload a new image to get
+                    started.
                   </p>
                 </div>
               )}
@@ -475,7 +545,9 @@ function UploadImaagePlugin(props) {
                       <motion.span
                         className={cn(
                           'inline font-mono text-xs',
-                          color.lightness < 0.5 ? 'text-background' : 'text-foreground'
+                          color.lightness < 0.5
+                            ? 'text-background'
+                            : 'text-foreground',
                         )}
                         layoutId={`color-name-${color.hex}`}
                       >

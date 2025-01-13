@@ -1,10 +1,14 @@
 'use client'
 
 import { areSearchParamColorsValid } from '@/lib/colorHelper'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useState } from 'react'
 
-function SearchParamsLoadingIndicator(searchParams: { accent?: string; primary?: string; secondary?: string }) {
+function SearchParamsLoadingIndicator(searchParams: {
+  accent?: string
+  primary?: string
+  secondary?: string
+}) {
   const { accent, primary, secondary } = searchParams
   const isColorValid = areSearchParamColorsValid(primary, secondary, accent)
   const [loading, setLoading] = useState(isColorValid ? true : false)

@@ -6,19 +6,23 @@ import { colorHelper } from '@/lib/colorHelper'
 import { useToolStore } from '@/store/toolStore'
 import { BaseColorTypes, RawColor } from '@/types/app'
 import { cn } from '@ui/lib/utils'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { Copy } from 'lucide-react'
 import { useTheme } from 'next-themes'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
-const PaletteButton = ({ animation, step, type }: { animation: number; step: number; type: BaseColorTypes }) => {
+const PaletteButton = React.forwardRef<
+  HTMLButtonElement,
+  { animation: number; step: number; type: BaseColorTypes }
+>(({ animation, step, type }, ref) => {
   const { theme } = useTheme()
   const [isChanging, setIsChanging] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
   const colorPalettes = useColorStore((s) => s.colors.colorPalettes)
   const { colorMode } = useToolStore()
   const { copyText } = useCopyText()
-  const color = colorPalettes?.[type]?.[step]?.raw || ({ h: 0, l: 0, s: 0 } as RawColor)
+  const color =
+    colorPalettes?.[type]?.[step]?.raw || ({ h: 0, l: 0, s: 0 } as RawColor)
   const { h, s } = color
   const shadowSmall = `${h} ${s * 100}% ${theme === 'dark' ? 17 : 73}% `
   const shadowLarge = `${h} ${s * 100}% ${theme === 'dark' ? 10 : 80}% `
@@ -36,25 +40,21 @@ const PaletteButton = ({ animation, step, type }: { animation: number; step: num
           () => {
             setIsChanging(false)
           },
-          100 + animation * 800
+          100 + animation * 800,
         )
       },
-      100 + animation * 800
+      100 + animation * 800,
     )
   }, [color])
   return (
     <motion.button
-      animate={
-        {
-          // filter: isChanging ? 'blur(2.5px)' : 'blur(0px)',
-        }
-      }
+      ref={ref}
       aria-label={`Click to copy ${colorString} to clipboard`}
       className={cn(
         'rounded-lg border border-border outline-none',
         'group',
         'transition-shadow duration-300 [--shadow-opacity:0] hover:[--shadow-opacity:0.8] dark:hover:[--shadow-opacity:0.3]',
-        'focus-within:[--shadow-opacity:0.8] dark:focus-within:[--shadow-opacity:0.3]'
+        'focus-within:[--shadow-opacity:0.8] dark:focus-within:[--shadow-opacity:0.3]',
       )}
       initial={{ scale: 1 }}
       onClick={() => copyText(colorString)}
@@ -74,7 +74,9 @@ const PaletteButton = ({ animation, step, type }: { animation: number; step: num
         animate={{
           opacity: isChanging ? 0.8 : 1,
         }}
-        className={cn('flex h-10 items-center justify-center rounded-[calc(var(--radius)_-_1px)]')}
+        className={cn(
+          'flex h-10 items-center justify-center rounded-[calc(var(--radius)_-_1px)]',
+        )}
         initial={{
           opacity: 1,
         }}
@@ -91,6 +93,6 @@ const PaletteButton = ({ animation, step, type }: { animation: number; step: num
       </motion.div>
     </motion.button>
   )
-}
+})
 
 export default PaletteButton

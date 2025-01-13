@@ -3,7 +3,7 @@
 import { useColorStore } from '@/context/color-store-provider'
 import { useToolStore } from '@/store/toolStore'
 import { cn } from '@ui/lib/utils'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { Copy } from 'lucide-react'
 import tinycolor from 'tinycolor2'
 
@@ -18,9 +18,18 @@ function AnalogousMonochromaticPalettes({ className }: { className?: string }) {
   )
 }
 
-const PillPalette = ({ color, type }: { color: string; type: 'analogous' | 'monochromatic' }) => {
+const PillPalette = ({
+  color,
+  type,
+}: {
+  color: string
+  type: 'analogous' | 'monochromatic'
+}) => {
   const { colorMode: mode } = useToolStore()
-  const colors = type === 'monochromatic' ? tinycolor(color).monochromatic(6) : tinycolor(color).analogous(6)
+  const colors =
+    type === 'monochromatic'
+      ? tinycolor(color).monochromatic(6)
+      : tinycolor(color).analogous(6)
   colors.sort((a, b) => {
     return tinycolor(b).getBrightness() - tinycolor(a).getBrightness()
   })
@@ -40,7 +49,7 @@ const PillPalette = ({ color, type }: { color: string; type: 'analogous' | 'mono
         'scroll-mt-8',
         'col-span-2 flex flex-col gap-3 md:gap-4',
         '@md/section-primary:col-span-1',
-        '@md/section-secondary:col-span-1'
+        '@md/section-secondary:col-span-1',
       )}
       id={`${type}-palette`}
     >
@@ -53,7 +62,7 @@ const PillPalette = ({ color, type }: { color: string; type: 'analogous' | 'mono
           <button
             aria-label={`Copy ${c} to clipboard`}
             className={cn(
-              'group/pill-btn flex h-10 w-full items-center justify-between rounded-full border border-border px-2.5 text-xs transition-colors duration-500 focus:outline-none focus:ring focus:ring-accent focus:ring-opacity-50'
+              'group/pill-btn flex h-10 w-full items-center justify-between rounded-full border border-border px-2.5 text-xs transition-colors duration-500 focus:outline-none focus:ring focus:ring-accent focus:ring-opacity-50',
             )}
             key={`${type}-${i}`}
             style={{
@@ -62,13 +71,16 @@ const PillPalette = ({ color, type }: { color: string; type: 'analogous' | 'mono
             }}
             type="button"
           >
-            <motion.code className={cn('animate-text', foregroundColor)} key={`${type}-text-${i}`}>
+            <motion.code
+              className={cn('animate-text', foregroundColor)}
+              key={`${type}-text-${i}`}
+            >
               {colorString(c)}
             </motion.code>
             <Copy
               className={cn(
                 'h-4 w-4 opacity-0 transition-opacity group-hover/pill-btn:opacity-100 group-focus/pill-btn:opacity-100',
-                foregroundColor
+                foregroundColor,
               )}
             />
           </button>
